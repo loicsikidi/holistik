@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package holistik.common.types.v1;
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/common/types/v1;typesv1";
+
+// PrivateKeyType is the storage type of a private key.
+enum PrivateKeyType {
+  // RAW is a plaintext private key.
+  RAW = 0;
+  // TPM is a private key backed by a TPM device.
+  TPM = 1;
+  //   // PKCS11 is a private key backed by a PKCS11 device such as HSM.
+  //   PKCS11 = 2;
+  //   // GCP_KMS is a private key backed by GCP KMS.
+  //   GCP_KMS = 3;
+  //   // AWS_KMS is a private key backed by AWS KMS.
+  //   AWS_KMS = 4;
+}
+
+// X509KeyPair is a key pair used to sign X.509 certificates.
+message X509KeyPair {
+  // Cert is a PEM encoded TLS cert
+  bytes cert = 1;
+  // Key is a PEM encoded TLS key
+  bytes key = 2;
+  // KeyType is the type of the Key.
+  PrivateKeyType key_type = 3;
+  // CRL is an empty DER-encoded revocation list.
+  bytes crl = 4;
+}
+
+// JWTKeyPair is a key pair used to sign JWT.
+message JWTKeyPair {
+  // PublicKey is a PEM encoded public key.
+  bytes public_key = 1;
+  // PrivateKey is a PEM encoded private key.
+  bytes private_key = 2;
+  // KeyType is the type of the Key.
+  PrivateKeyType key_type = 3;
+}
+
+// CAKeySet is the set of CA keys.
+message CAKeySet {
+  //  contains CA key/cert pairs.
+  repeated X509KeyPair x509 = 1;
+  // JWT contains signing key pairs.
+  repeated JWTKeyPair jwt = 2;
+}
+
+// PIVSlotKey is the key reference for a specific PIV slot.
+enum PIVSlotKey {
+  // PIV slot key not specified.
+  PIV_SLOT_KEY_UNSPECIFIED = 0;
+  // PIV slot key 9a. This is the default slot for pin_policy=never, touch_policy=never.
+  PIV_SLOT_KEY_9A = 1;
+  // PIV slot key 9c. This is the default slot for pin_policy=never, touch_policy=cached.
+  PIV_SLOT_KEY_9C = 2;
+  // PIV slot key 9d. This is the default slot for pin_policy=once, touch_policy=cached.
+  PIV_SLOT_KEY_9D = 3;
+  // PIV slot key 9e. This is the default slot for pin_policy=once, touch_policy=never.
+  PIV_SLOT_KEY_9E = 4;
+}
+
+// SignatureAlgorithmSuite represents the suite of cryptographic signature algorithms used in the cluster.
+enum SignatureAlgorithmSuite {
+  // SIGNATURE_ALGORITHM_SUITE_UNSPECIFIED represents an unspecified signature algorithm suite.
+  SIGNATURE_ALGORITHM_SUITE_UNSPECIFIED = 0;
+  // SIGNATURE_ALGORITHM_SUITE_BALANCED_V1 aims to strikes a balance between
+  // security, compatibility, and performance. It uses Ed25519 for most SSH
+  // keys, ECDSA on the NIST P256 curve for most TLS keys, and 2048-bit RSA
+  // where necessary for compatibility with third-party software.
+  SIGNATURE_ALGORITHM_SUITE_BALANCED_V1 = 1;
+  // SIGNATURE_ALGORITHM_SUITE_FIPS_V1 is tailored for FIPS compliance. It is
+  // based on the BALANCED_V1 suite but replaces all instances of Ed25519 with
+  // ECDSA on the NIST P256 curve.
+  SIGNATURE_ALGORITHM_SUITE_FIPS_V1 = 2;
+  // SIGNATURE_ALGORITHM_SUITE_HSM_V1 is tailored for clusters using an HSM or
+  // KMS service to back CA private material. It is based on the BALANCED suite
+  // but replaces Ed25519 with ECDSA on the NIST P256 curve for CA keys only,
+  // not for server or client keys. It is also valid to use the LEGACY for FIPS
+  // suites if your cluster uses an HSM or KMS.
+  SIGNATURE_ALGORITHM_SUITE_HSM_V1 = 3;
+}
+
+// KeyLabel combines a label that can be used to identify one or more keys with a keystore type that
+// determines where the keys can be found.
+message KeyLabel {
+  // Label is a value that can be used with the related keystore in order to find relevant keys.
+  string label = 1;
+  // Type represents which keystore should be searched when looking up keys by label.
+  string key_type = 2;
+}

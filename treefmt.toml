@@ -1,0 +1,12 @@
+[formatter.proto]
+command = ".tools/treefmt-buf.sh"
+includes = ["proto/**/*.proto"]
+
+[formatter.go]
+command = "gofmt"
+options = ["-w"]
+includes = ["*.go"]
+
+[formatter.nix]
+command = "alejandra"
+includes = ["*.nix"]

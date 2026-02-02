@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package holistik.api.device.v1;
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/device/v1;devicev1";
+
+// Encapsulates the value of a PCR at a point at time.
+// See https://pkg.go.dev/github.com/google/go-attestation/attest#PCR
+message TPMPCR {
+  // the PCR index in the PCR bank
+  int32 index = 1;
+  // the digest currently held in the PCR
+  bytes digest = 2;
+  // the hash algorithm used to produce the digest in this PCR bank. This value
+  // is the underlying value of the Go crypto.Hash type.
+  uint64 digest_alg = 3;
+}
+
+// Encapsulates the result of a quote operation against the TPM over a PCR
+// using an attestation key.
+// See https://pkg.go.dev/github.com/google/go-attestation/attest#Quote
+message TPMQuote {
+  // Required.
+  bytes quote = 1;
+  // Required.
+  bytes signature = 2;
+}
+
+// The quotes, PCRs and event log from a TPM that attest to the booted state
+// of the machine.
+// See https://pkg.go.dev/github.com/google/go-attestation/attest#PlatformParameters
+// Excludes TPMVersion and Public since these are already known values.
+message TPMPlatformParameters {
+  // Required.
+  repeated TPMQuote quotes = 1;
+  // Required.
+  repeated TPMPCR pcrs = 2;
+  // Required.
+  bytes event_log = 3;
+}
+
+// Holds the record of a TPM platform attestation, including the platform
+// parameters sent by the device and the nonce the server generated. This allows
+// a historical platform attestation to be revalidated and allows us to compare
+// the incoming state of a device (e.g during authentication) against the
+// historical state in order to detect potentially malicious actions.
+message TPMPlatformAttestation {
+  // Required.
+  bytes nonce = 1;
+  // Required.
+  TPMPlatformParameters platform_parameters = 2;
+}
+
+// The attestation key and the parameters necessary to remotely verify it as
+// related to the endorsement key.
+// See [attest.AttestationParameters] for more details
+message TPMAttestationParameters {
+  // The encoded TPMT_PUBLIC structure containing the attestation public key
+  // and signing parameters.
+  // Required.
+  bytes public = 1;
+  // The properties of the attestation key, encoded as a TPMS_CREATION_DATA
+  // structure.
+  // Required.
+  bytes create_data = 2;
+  // An assertion as to the details of the key, encoded as a TPMS_ATTEST
+  // structure.
+  // Required.
+  bytes create_attestation = 3;
+  // A signature of create_attestation, encoded as a TPMT_SIGNATURE structure.
+  // Required.
+  bytes create_signature = 4;
+}
+
+// TPMEncryptedCredential represent the output of `MakeCredential` command.
+// These values is expected to be used with the `ActivateCredential` command.
+message TPMEncryptedCredential {
+  // The `credential_blob`
+  bytes credential_blob = 1;
+  // The `secret`
+  bytes secret = 2;
+}
+
+message TPMAuditLog {
+  // The audit log data.
+  bytes audit_log = 1;
+  // the hash algorithm used to produce the digest of the audit log in.
+  // This value is the underlying value of the Go crypto.Hash type.
+  uint64 digest_alg = 2;
+  // The signature of the audit log's digest produced by the TPM.
+  bytes signature = 3;
+}

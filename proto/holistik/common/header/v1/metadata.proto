@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package holistik.common.header.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/common/header/v1;headerv1";
+
+// Metadata is resource metadata.
+message Metadata {
+  // name is an object name.
+  string name = 1;
+  // namespace is object namespace.
+  string namespace = 2;
+  // description is object description.
+  string description = 3;
+  // labels is a set of labels.
+  map<string, string> labels = 5;
+  // expires is a global expiry time header can be set on any resource in the
+  // system.
+  google.protobuf.Timestamp expires = 6;
+  // revision is an opaque identifier which tracks the versions of a resource
+  // over time. Clients should ignore and not alter its value but must return
+  // the revision in any updates of a resource.
+  string revision = 7;
+}

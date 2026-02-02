@@ -1,0 +1,37 @@
+version: v2
+
+modules:
+  - path: proto/
+
+deps:
+  - buf.build/googleapis/googleapis:beb34b4050abfcfff72ff5cc6a28f0afa4043ce0
+
+lint:
+  use:
+    - STANDARD
+    - COMMENT_ENUM
+    - COMMENT_MESSAGE
+    - COMMENT_RPC
+    - COMMENT_SERVICE
+    - PACKAGE_NO_IMPORT_CYCLE
+    - PAGINATION_REQUIRED
+    - UNARY_RPC
+  except:
+    - FIELD_NOT_REQUIRED
+    - RPC_REQUEST_RESPONSE_UNIQUE
+    - RPC_RESPONSE_STANDARD_NAME
+
+breaking:
+  use:
+    - ENUM_VALUE_NO_DELETE
+    - WIRE_JSON
+
+# plugins:
+#   - plugin:
+#       - env
+#       - GOWORK=off
+#       - go
+#       - -C
+#       - ./build.assets/tooling
+#       - run
+#       - ./cmd/buf-plugin-linters

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package holistik.api.certauthority.v1;
+
+import "holistik/common/header/v1/metadata.proto";
+import "holistik/common/types/v1/types.proto";
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1";
+
+// CertAuthority represents a CA
+message CertAuthority {
+  // The kind of resource represented.
+  string kind = 1;
+  // Differentiates variations of the same kind. All resources should
+  // contain one, even if it is never populated.
+  string sub_kind = 2;
+  // The version of the resource being represented.
+  string version = 3;
+  // Common metadata that all resources share.
+  holistik.common.header.v1.Metadata metadata = 4;
+  // spec is the specification for the certificate authority.
+  CertAuthoritySpec spec = 5;
+}
+
+message CertAuthoritySpec {
+  enum CertAuthorityType {
+    CERT_AUTHORITY_TYPE_UNSPECIFIED = 0;
+    CERT_AUTHORITY_TYPE_IDENTITY = 1;
+    CERT_AUTHORITY_TYPE_ATTESTATION = 2;
+  }
+
+  // type identifies the type of certificate authority (eg. identity, attestation, etc.)
+  CertAuthorityType type = 1;
+
+  // cluster_name identifies the cluster name this authority serves
+  string cluster_name = 2;
+
+  // active_keys are the CA key sets used to sign any new certificates.
+  holistik.common.types.v1.CAKeySet active_keys = 3;
+
+  // additional_trusted_keys are additional CA key sets that can be used to
+  // verify certificates. Certificates should be verified with
+  // additional_trusted_keys and active_keys combined.
+  holistik.common.types.v1.CAKeySet additional_trusted_keys = 4;
+}

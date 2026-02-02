@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package holistik.api.certauthority.v1;
+
+import "holistik/api/certauthority/v1/certauthority.proto";
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1";
+
+// DeviceService provides methods to manage, enroll and authenticate trusted devices.
+//
+// Important: the initial implementation only focus on TPM devices.
+service CertAuthorityService {
+  // GetCertAuthority returns a cert authority by type and domain.
+  rpc GetCertAuthority(GetCertAuthorityRequest) returns (CertAuthority);
+  // ListCertAuthorities returns a list of cert authorities by type.
+  rpc ListCertAuthorities(ListCertAuthoritiesRequest) returns (ListCertAuthoritiesResponse);
+  // // DeleteCertAuthority deletes the matching cert authority.
+  // rpc DeleteCertAuthority(DeleteCertAuthorityRequest) returns (google.protobuf.Empty);
+  // // UpsertCertAuthority creates or updates the provided cert authority.
+  // rpc UpdateCertAuthority(UpsertCertAuthorityRequest) returns (CertAuthority);
+}
+
+// Request for GetCertAuthority
+message GetCertAuthorityRequest {
+  // Type of certificate authority.
+  string type = 1;
+  // The domain for the certificate authority.
+  string domain = 2;
+  // Whether the private key should be included in the response.
+  bool include_key = 3;
+}
+
+// Request for GetCertAuthorities
+message GetCertAuthoritiesRequest {
+  // Type of certificate authority.
+  string type = 1;
+  // Whether the private key should be included in the response.
+  bool include_key = 2;
+}
+
+//
+message ListCertAuthoritiesRequest {
+  reserved 1, 2;
+  // // Type of certificate authority.
+  // string type = 1;
+  // // Whether the private key should be included in the response.
+  // bool include_key = 2;
+
+  // The maximum number of items to return.
+  // The server may impose a different page size at its discretion.
+  int32 page_size = 3;
+  // The next_page_token value returned from a previous List request, if any.
+  string page_token = 4;
+}
+
+// ListCertAuthoritiesResponse is the response for ListCertAuthorities.
+message ListCertAuthoritiesResponse {
+  // CertAuthorities is a list of CertAuthority resources.
+  repeated CertAuthority cert_authorities = 1;
+  // Token to retrieve the next page of results, or empty if there are no
+  // more results in the list.
+  string next_page_token = 2;
+}

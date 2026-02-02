@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package holistik.api.device.v1;
+
+import "holistik/api/device/v1/device_collected_data.proto";
+import "holistik/api/device/v1/tpm.proto";
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/device/v1;devicev1";
+
+// DeviceService provides methods to manage, enroll and authenticate trusted devices.
+//
+// Important: the initial implementation only focus on TPM devices.
+service DeviceService {
+  // BootstrapDevice creates a long-lived device identity to a target device.
+  //
+  // This RPC follows `TPM 2.0 Keys for Device Identity and Attestation v1.1` specification
+  // in order to create an IAK (Initial Attestation Key) and IDEVID (Initial Device Identity)
+  // certificates.
+  //
+  // Spec: https://trustedcomputinggroup.org/wp-content/uploads/TPM-2.0-Keys-for-Device-Identity-and-Attestation-v1.10r9_pub.pdf
+  //
+  // These certificates will be used to establish a trusted identity for the device.
+  rpc BootstrapDevice(stream BootstrapDeviceRequest) returns (stream BootstrapDeviceResponse);
+}
+
+message BootstrapDeviceRequest {
+  oneof payload {
+    BootstrapHello hello = 1;
+    BootstrapDeviceInit init = 2;
+    TPMBootstrapChallengeResponse challenge_response = 3;
+  }
+}
+
+message BootstrapDeviceResponse {
+  oneof payload {
+    BootstrapHelloResponse hello_response = 1;
+    TPMBootstrapChallenge challenge = 2;
+    BootstrapSuccess success = 3;
+  }
+}
+
+message BootstrapHello {
+  BoostrapMethod preferred_method = 1;
+}
+
+message BootstrapHelloResponse {
+  // Method expected by the server.
+  // It took account of client's preferred method and decided the final method.
+  BoostrapMethod method = 1;
+  bool require_attestation = 2;
+}
+
+message BootstrapDeviceInit {
+  // Bootstrap enrollment token.
+  string token = 1;
+
+  // Device collected data.
+  holistik.api.device.v1.DeviceCollectedData device_data = 2;
+
+  // TCG-CSR-IDEVID content.
+  bytes tcg_csr = 3;
+}
+
+enum BoostrapMethod {
+  BOOSTRAP_METHOD_UNSPECIFIED = 0;
+  BOOSTRAP_METHOD_SINGLE_PASS = 1;
+  BOOSTRAP_METHOD_SINGLE_PASS_SINGLE_ROUND_TRIP = 2;
+  BOOSTRAP_METHOD_IAK = 3;
+  BOOSTRAP_METHOD_IAK_SINGLE_ROUND_TRIP = 4;
+  BOOSTRAP_METHOD_IDEVID = 5;
+  BOOSTRAP_METHOD_IDEVID_SINGLE_ROUND_TRIP = 6;
+}
+
+message TPMBootstrapChallenge {
+  holistik.api.device.v1.TPMEncryptedCredential challenge = 1;
+}
+
+message TPMBootstrapChallengeResponse {
+  oneof payload {
+    // The secret created by the server in response to the challenge.
+    bytes secret = 1;
+    // The IAK or IDEVID certificate.
+    //
+    // Note: field limited to `Single Round-Trip` method.
+    bytes cert = 2;
+  }
+  holistik.api.device.v1.TPMAuditLog audit_log = 3;
+}
+
+message BootstrapSuccess {
+  // Certificate is a PEM encoded TLS cert
+  //
+  // Note: the certificate can contain multiple certificates forming a chain.
+  repeated bytes certificate = 1;
+}

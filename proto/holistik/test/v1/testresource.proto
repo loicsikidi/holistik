@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package holistik.test.v1;
+
+import "holistik/common/header/v1/metadata.proto";
+
+option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/test/v1;testv1";
+
+// TestResource is a simple compliant resource for testing purposes
+message TestResource {
+  // The kind of resource represented.
+  string kind = 1;
+  // Differentiates variations of the same kind. All resources should
+  // contain one, even if it is never populated.
+  string sub_kind = 2;
+  // The version of the resource being represented.
+  string version = 3;
+  // Common metadata that all resources share.
+  holistik.common.header.v1.Metadata metadata = 4;
+  // spec is the specification for the test resource.
+  TestResourceSpec spec = 5;
+}
+
+message TestResourceSpec {
+  // prop_a is a test property
+  string prop_a = 1;
+}
+
+// InvalidTestResource is a simple non-compliant resource for testing purposes
+//
+// Non-compliant because it lacks a spec field
+message InvalidTestResource {
+  // The kind of resource represented.
+  string kind = 1;
+  // Differentiates variations of the same kind. All resources should
+  // contain one, even if it is never populated.
+  string sub_kind = 2;
+  // The version of the resource being represented.
+  string version = 3;
+  // Common metadata that all resources share.
+  holistik.common.header.v1.Metadata metadata = 4;
+}
