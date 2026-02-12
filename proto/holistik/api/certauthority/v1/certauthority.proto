@@ -23,23 +23,12 @@ message CertAuthority {
 }
 
 message CertAuthoritySpec {
-  enum CertAuthorityType {
-    CERT_AUTHORITY_TYPE_UNSPECIFIED = 0;
-    CERT_AUTHORITY_TYPE_IDENTITY = 1;
-    CERT_AUTHORITY_TYPE_ATTESTATION = 2;
-  }
-
   // type identifies the type of certificate authority (eg. identity, attestation, etc.)
-  CertAuthorityType type = 1;
+  string type = 1;
 
-  // cluster_name identifies the cluster name this authority serves
-  string cluster_name = 2;
+  // tenant identifies the tenant this authority serves
+  string tenant = 2;
 
-  // active_keys are the CA key sets used to sign any new certificates.
-  holistik.common.types.v1.CAKeySet active_keys = 3;
-
-  // additional_trusted_keys are additional CA key sets that can be used to
-  // verify certificates. Certificates should be verified with
-  // additional_trusted_keys and active_keys combined.
-  holistik.common.types.v1.CAKeySet additional_trusted_keys = 4;
+  // keyset is the CA key set used to sign any new certificates.
+  holistik.common.types.v1.CAKeySet keyset = 3;
 }

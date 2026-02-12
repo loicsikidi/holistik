@@ -9,6 +9,7 @@ package typesv1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -21,52 +22,59 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// PrivateKeyType is the storage type of a private key.
-type PrivateKeyType int32
+type KeyStatus int32
 
 const (
-	// RAW is a plaintext private key.
-	PrivateKeyType_RAW PrivateKeyType = 0
-	// TPM is a private key backed by a TPM device.
-	PrivateKeyType_TPM PrivateKeyType = 1
+	// KEY_STATUS_UNSPECIFIED represents an unspecified key status.
+	KeyStatus_KEY_STATUS_UNSPECIFIED KeyStatus = 0
+	// KEY_STATUS_ACTIVE represents an active key.
+	KeyStatus_KEY_STATUS_ENABLED KeyStatus = 1
+	// KEY_STATUS_DISABLED represents a disabled key.
+	KeyStatus_KEY_STATUS_DISABLED KeyStatus = 2
+	// KEY_STATUS_DESTROYED represents a destroyed key.
+	KeyStatus_KEY_STATUS_DESTROYED KeyStatus = 3
 )
 
-// Enum value maps for PrivateKeyType.
+// Enum value maps for KeyStatus.
 var (
-	PrivateKeyType_name = map[int32]string{
-		0: "RAW",
-		1: "TPM",
+	KeyStatus_name = map[int32]string{
+		0: "KEY_STATUS_UNSPECIFIED",
+		1: "KEY_STATUS_ENABLED",
+		2: "KEY_STATUS_DISABLED",
+		3: "KEY_STATUS_DESTROYED",
 	}
-	PrivateKeyType_value = map[string]int32{
-		"RAW": 0,
-		"TPM": 1,
+	KeyStatus_value = map[string]int32{
+		"KEY_STATUS_UNSPECIFIED": 0,
+		"KEY_STATUS_ENABLED":     1,
+		"KEY_STATUS_DISABLED":    2,
+		"KEY_STATUS_DESTROYED":   3,
 	}
 )
 
-func (x PrivateKeyType) Enum() *PrivateKeyType {
-	p := new(PrivateKeyType)
+func (x KeyStatus) Enum() *KeyStatus {
+	p := new(KeyStatus)
 	*p = x
 	return p
 }
 
-func (x PrivateKeyType) String() string {
+func (x KeyStatus) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (PrivateKeyType) Descriptor() protoreflect.EnumDescriptor {
+func (KeyStatus) Descriptor() protoreflect.EnumDescriptor {
 	return file_holistik_common_types_v1_types_proto_enumTypes[0].Descriptor()
 }
 
-func (PrivateKeyType) Type() protoreflect.EnumType {
+func (KeyStatus) Type() protoreflect.EnumType {
 	return &file_holistik_common_types_v1_types_proto_enumTypes[0]
 }
 
-func (x PrivateKeyType) Number() protoreflect.EnumNumber {
+func (x KeyStatus) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use PrivateKeyType.Descriptor instead.
-func (PrivateKeyType) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use KeyStatus.Descriptor instead.
+func (KeyStatus) EnumDescriptor() ([]byte, []int) {
 	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{0}
 }
 
@@ -197,16 +205,156 @@ func (SignatureAlgorithmSuite) EnumDescriptor() ([]byte, []int) {
 	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{2}
 }
 
+type CAKeySet_KeySetType int32
+
+const (
+	CAKeySet_KEYSET_TYPE_UNSPECIFIED CAKeySet_KeySetType = 0
+	CAKeySet_KEYSET_TYPE_INSECURE    CAKeySet_KeySetType = 1
+	CAKeySet_KEYSET_TYPE_ENCRYPTED   CAKeySet_KeySetType = 2
+)
+
+// Enum value maps for CAKeySet_KeySetType.
+var (
+	CAKeySet_KeySetType_name = map[int32]string{
+		0: "KEYSET_TYPE_UNSPECIFIED",
+		1: "KEYSET_TYPE_INSECURE",
+		2: "KEYSET_TYPE_ENCRYPTED",
+	}
+	CAKeySet_KeySetType_value = map[string]int32{
+		"KEYSET_TYPE_UNSPECIFIED": 0,
+		"KEYSET_TYPE_INSECURE":    1,
+		"KEYSET_TYPE_ENCRYPTED":   2,
+	}
+)
+
+func (x CAKeySet_KeySetType) Enum() *CAKeySet_KeySetType {
+	p := new(CAKeySet_KeySetType)
+	*p = x
+	return p
+}
+
+func (x CAKeySet_KeySetType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CAKeySet_KeySetType) Descriptor() protoreflect.EnumDescriptor {
+	return file_holistik_common_types_v1_types_proto_enumTypes[3].Descriptor()
+}
+
+func (CAKeySet_KeySetType) Type() protoreflect.EnumType {
+	return &file_holistik_common_types_v1_types_proto_enumTypes[3]
+}
+
+func (x CAKeySet_KeySetType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CAKeySet_KeySetType.Descriptor instead.
+func (CAKeySet_KeySetType) EnumDescriptor() ([]byte, []int) {
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{4, 0}
+}
+
+type CAKeySet_KeySetBackend int32
+
+const (
+	CAKeySet_KEYSET_BACKEND_UNSPECIFIED CAKeySet_KeySetBackend = 0
+	CAKeySet_KEYSET_BACKEND_RAW         CAKeySet_KeySetBackend = 1
+)
+
+// Enum value maps for CAKeySet_KeySetBackend.
+var (
+	CAKeySet_KeySetBackend_name = map[int32]string{
+		0: "KEYSET_BACKEND_UNSPECIFIED",
+		1: "KEYSET_BACKEND_RAW",
+	}
+	CAKeySet_KeySetBackend_value = map[string]int32{
+		"KEYSET_BACKEND_UNSPECIFIED": 0,
+		"KEYSET_BACKEND_RAW":         1,
+	}
+)
+
+func (x CAKeySet_KeySetBackend) Enum() *CAKeySet_KeySetBackend {
+	p := new(CAKeySet_KeySetBackend)
+	*p = x
+	return p
+}
+
+func (x CAKeySet_KeySetBackend) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CAKeySet_KeySetBackend) Descriptor() protoreflect.EnumDescriptor {
+	return file_holistik_common_types_v1_types_proto_enumTypes[4].Descriptor()
+}
+
+func (CAKeySet_KeySetBackend) Type() protoreflect.EnumType {
+	return &file_holistik_common_types_v1_types_proto_enumTypes[4]
+}
+
+func (x CAKeySet_KeySetBackend) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CAKeySet_KeySetBackend.Descriptor instead.
+func (CAKeySet_KeySetBackend) EnumDescriptor() ([]byte, []int) {
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{4, 1}
+}
+
+type X509KeyPairs struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Pairs         []*X509KeyPair         `protobuf:"bytes,1,rep,name=pairs,proto3" json:"pairs,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *X509KeyPairs) Reset() {
+	*x = X509KeyPairs{}
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *X509KeyPairs) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*X509KeyPairs) ProtoMessage() {}
+
+func (x *X509KeyPairs) ProtoReflect() protoreflect.Message {
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use X509KeyPairs.ProtoReflect.Descriptor instead.
+func (*X509KeyPairs) Descriptor() ([]byte, []int) {
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *X509KeyPairs) GetPairs() []*X509KeyPair {
+	if x != nil {
+		return x.Pairs
+	}
+	return nil
+}
+
 // X509KeyPair is a key pair used to sign X.509 certificates.
 type X509KeyPair struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
+	// KeyID is the identifier of the key.
+	// This identifier is stored alongside the key in the keyset.
+	Keyid []byte `protobuf:"bytes,1,opt,name=keyid,proto3" json:"keyid,omitempty"`
+	// Status is the status of the key.
+	Status KeyStatus `protobuf:"varint,2,opt,name=status,proto3,enum=holistik.common.types.v1.KeyStatus" json:"status,omitempty"`
 	// Cert is a PEM encoded TLS cert
-	Cert []byte `protobuf:"bytes,1,opt,name=cert,proto3" json:"cert,omitempty"`
-	// Key is a PEM encoded TLS key
-	Key []byte `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	// KeyType is the type of the Key.
-	KeyType PrivateKeyType `protobuf:"varint,3,opt,name=key_type,json=keyType,proto3,enum=holistik.common.types.v1.PrivateKeyType" json:"key_type,omitempty"`
-	// CRL is an empty DER-encoded revocation list.
+	Cert []byte `protobuf:"bytes,3,opt,name=cert,proto3" json:"cert,omitempty"`
+	// CRL is a DER-encoded revocation list.
 	Crl           []byte `protobuf:"bytes,4,opt,name=crl,proto3" json:"crl,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -214,7 +362,7 @@ type X509KeyPair struct {
 
 func (x *X509KeyPair) Reset() {
 	*x = X509KeyPair{}
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[0]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -226,7 +374,7 @@ func (x *X509KeyPair) String() string {
 func (*X509KeyPair) ProtoMessage() {}
 
 func (x *X509KeyPair) ProtoReflect() protoreflect.Message {
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[0]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +387,21 @@ func (x *X509KeyPair) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use X509KeyPair.ProtoReflect.Descriptor instead.
 func (*X509KeyPair) Descriptor() ([]byte, []int) {
-	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{0}
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *X509KeyPair) GetKeyid() []byte {
+	if x != nil {
+		return x.Keyid
+	}
+	return nil
+}
+
+func (x *X509KeyPair) GetStatus() KeyStatus {
+	if x != nil {
+		return x.Status
+	}
+	return KeyStatus_KEY_STATUS_UNSPECIFIED
 }
 
 func (x *X509KeyPair) GetCert() []byte {
@@ -249,23 +411,53 @@ func (x *X509KeyPair) GetCert() []byte {
 	return nil
 }
 
-func (x *X509KeyPair) GetKey() []byte {
+func (x *X509KeyPair) GetCrl() []byte {
 	if x != nil {
-		return x.Key
+		return x.Crl
 	}
 	return nil
 }
 
-func (x *X509KeyPair) GetKeyType() PrivateKeyType {
-	if x != nil {
-		return x.KeyType
-	}
-	return PrivateKeyType_RAW
+type JWTKeyPairs struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Pairs         []*JWTKeyPair          `protobuf:"bytes,1,rep,name=pairs,proto3" json:"pairs,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-func (x *X509KeyPair) GetCrl() []byte {
+func (x *JWTKeyPairs) Reset() {
+	*x = JWTKeyPairs{}
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *JWTKeyPairs) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JWTKeyPairs) ProtoMessage() {}
+
+func (x *JWTKeyPairs) ProtoReflect() protoreflect.Message {
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[2]
 	if x != nil {
-		return x.Crl
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JWTKeyPairs.ProtoReflect.Descriptor instead.
+func (*JWTKeyPairs) Descriptor() ([]byte, []int) {
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *JWTKeyPairs) GetPairs() []*JWTKeyPair {
+	if x != nil {
+		return x.Pairs
 	}
 	return nil
 }
@@ -275,17 +467,18 @@ type JWTKeyPair struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// PublicKey is a PEM encoded public key.
 	PublicKey []byte `protobuf:"bytes,1,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
-	// PrivateKey is a PEM encoded private key.
-	PrivateKey []byte `protobuf:"bytes,2,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
-	// KeyType is the type of the Key.
-	KeyType       PrivateKeyType `protobuf:"varint,3,opt,name=key_type,json=keyType,proto3,enum=holistik.common.types.v1.PrivateKeyType" json:"key_type,omitempty"`
+	// KeyID is the identifier of the key.
+	// This identifier is stored alongside the key in the keyset.
+	Keyid []byte `protobuf:"bytes,2,opt,name=keyid,proto3" json:"keyid,omitempty"`
+	// Status is the status of the key.
+	Status        KeyStatus `protobuf:"varint,3,opt,name=status,proto3,enum=holistik.common.types.v1.KeyStatus" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JWTKeyPair) Reset() {
 	*x = JWTKeyPair{}
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[1]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -297,7 +490,7 @@ func (x *JWTKeyPair) String() string {
 func (*JWTKeyPair) ProtoMessage() {}
 
 func (x *JWTKeyPair) ProtoReflect() protoreflect.Message {
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[1]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -310,7 +503,7 @@ func (x *JWTKeyPair) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JWTKeyPair.ProtoReflect.Descriptor instead.
 func (*JWTKeyPair) Descriptor() ([]byte, []int) {
-	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{1}
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *JWTKeyPair) GetPublicKey() []byte {
@@ -320,34 +513,48 @@ func (x *JWTKeyPair) GetPublicKey() []byte {
 	return nil
 }
 
-func (x *JWTKeyPair) GetPrivateKey() []byte {
+func (x *JWTKeyPair) GetKeyid() []byte {
 	if x != nil {
-		return x.PrivateKey
+		return x.Keyid
 	}
 	return nil
 }
 
-func (x *JWTKeyPair) GetKeyType() PrivateKeyType {
+func (x *JWTKeyPair) GetStatus() KeyStatus {
 	if x != nil {
-		return x.KeyType
+		return x.Status
 	}
-	return PrivateKeyType_RAW
+	return KeyStatus_KEY_STATUS_UNSPECIFIED
 }
 
 // CAKeySet is the set of CA keys.
 type CAKeySet struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// contains CA key/cert pairs.
-	X509 []*X509KeyPair `protobuf:"bytes,1,rep,name=x509,proto3" json:"x509,omitempty"`
-	// JWT contains signing key pairs.
-	Jwt           []*JWTKeyPair `protobuf:"bytes,2,rep,name=jwt,proto3" json:"jwt,omitempty"`
+	// Type is the type of the keyset.
+	Type CAKeySet_KeySetType `protobuf:"varint,1,opt,name=type,proto3,enum=holistik.common.types.v1.CAKeySet_KeySetType" json:"type,omitempty"`
+	// keyset_data is a serialized Tink keyset.
+	// google.crypto.tink.Keyset or google.crypto.tink.EncryptedKeyset
+	KeysetData []byte `protobuf:"bytes,2,opt,name=keyset_data,json=keysetData,proto3" json:"keyset_data,omitempty"`
+	// Backend is the backend the keyset needs to interact with.
+	//
+	// Note: if keyset_type is INSECURE, this field must be equal to RAW.
+	KeysetBackend CAKeySet_KeySetBackend `protobuf:"varint,3,opt,name=keyset_backend,json=keysetBackend,proto3,enum=holistik.common.types.v1.CAKeySet_KeySetBackend" json:"keyset_backend,omitempty"`
+	// UseEnvelopeEncryption indicates whether envelope encryption needs to be used.
+	UseEnvelopeEncryption bool `protobuf:"varint,4,opt,name=use_envelope_encryption,json=useEnvelopeEncryption,proto3" json:"use_envelope_encryption,omitempty"`
+	// KeyPairs contains the key pairs linked to the keyset.
+	//
+	// Types that are valid to be assigned to KeyPairs:
+	//
+	//	*CAKeySet_X509
+	//	*CAKeySet_Jwt
+	KeyPairs      isCAKeySet_KeyPairs `protobuf_oneof:"key_pairs"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CAKeySet) Reset() {
 	*x = CAKeySet{}
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[2]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -359,7 +566,7 @@ func (x *CAKeySet) String() string {
 func (*CAKeySet) ProtoMessage() {}
 
 func (x *CAKeySet) ProtoReflect() protoreflect.Message {
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[2]
+	mi := &file_holistik_common_types_v1_types_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,105 +579,120 @@ func (x *CAKeySet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CAKeySet.ProtoReflect.Descriptor instead.
 func (*CAKeySet) Descriptor() ([]byte, []int) {
-	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{2}
+	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *CAKeySet) GetX509() []*X509KeyPair {
+func (x *CAKeySet) GetType() CAKeySet_KeySetType {
 	if x != nil {
-		return x.X509
+		return x.Type
+	}
+	return CAKeySet_KEYSET_TYPE_UNSPECIFIED
+}
+
+func (x *CAKeySet) GetKeysetData() []byte {
+	if x != nil {
+		return x.KeysetData
 	}
 	return nil
 }
 
-func (x *CAKeySet) GetJwt() []*JWTKeyPair {
+func (x *CAKeySet) GetKeysetBackend() CAKeySet_KeySetBackend {
 	if x != nil {
-		return x.Jwt
+		return x.KeysetBackend
+	}
+	return CAKeySet_KEYSET_BACKEND_UNSPECIFIED
+}
+
+func (x *CAKeySet) GetUseEnvelopeEncryption() bool {
+	if x != nil {
+		return x.UseEnvelopeEncryption
+	}
+	return false
+}
+
+func (x *CAKeySet) GetKeyPairs() isCAKeySet_KeyPairs {
+	if x != nil {
+		return x.KeyPairs
 	}
 	return nil
 }
 
-// KeyLabel combines a label that can be used to identify one or more keys with a keystore type that
-// determines where the keys can be found.
-type KeyLabel struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// Label is a value that can be used with the related keystore in order to find relevant keys.
-	Label string `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
-	// Type represents which keystore should be searched when looking up keys by label.
-	KeyType       string `protobuf:"bytes,2,opt,name=key_type,json=keyType,proto3" json:"key_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *KeyLabel) Reset() {
-	*x = KeyLabel{}
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *KeyLabel) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*KeyLabel) ProtoMessage() {}
-
-func (x *KeyLabel) ProtoReflect() protoreflect.Message {
-	mi := &file_holistik_common_types_v1_types_proto_msgTypes[3]
+func (x *CAKeySet) GetX509() *X509KeyPairs {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
+		if x, ok := x.KeyPairs.(*CAKeySet_X509); ok {
+			return x.X509
 		}
-		return ms
 	}
-	return mi.MessageOf(x)
+	return nil
 }
 
-// Deprecated: Use KeyLabel.ProtoReflect.Descriptor instead.
-func (*KeyLabel) Descriptor() ([]byte, []int) {
-	return file_holistik_common_types_v1_types_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *KeyLabel) GetLabel() string {
+func (x *CAKeySet) GetJwt() *JWTKeyPairs {
 	if x != nil {
-		return x.Label
+		if x, ok := x.KeyPairs.(*CAKeySet_Jwt); ok {
+			return x.Jwt
+		}
 	}
-	return ""
+	return nil
 }
 
-func (x *KeyLabel) GetKeyType() string {
-	if x != nil {
-		return x.KeyType
-	}
-	return ""
+type isCAKeySet_KeyPairs interface {
+	isCAKeySet_KeyPairs()
 }
+
+type CAKeySet_X509 struct {
+	X509 *X509KeyPairs `protobuf:"bytes,5,opt,name=x509,proto3,oneof"`
+}
+
+type CAKeySet_Jwt struct {
+	Jwt *JWTKeyPairs `protobuf:"bytes,6,opt,name=jwt,proto3,oneof"`
+}
+
+func (*CAKeySet_X509) isCAKeySet_KeyPairs() {}
+
+func (*CAKeySet_Jwt) isCAKeySet_KeyPairs() {}
 
 var File_holistik_common_types_v1_types_proto protoreflect.FileDescriptor
 
 const file_holistik_common_types_v1_types_proto_rawDesc = "" +
 	"\n" +
-	"$holistik/common/types/v1/types.proto\x12\x18holistik.common.types.v1\"\x8a\x01\n" +
-	"\vX509KeyPair\x12\x12\n" +
-	"\x04cert\x18\x01 \x01(\fR\x04cert\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\fR\x03key\x12C\n" +
-	"\bkey_type\x18\x03 \x01(\x0e2(.holistik.common.types.v1.PrivateKeyTypeR\akeyType\x12\x10\n" +
-	"\x03crl\x18\x04 \x01(\fR\x03crl\"\x91\x01\n" +
+	"$holistik/common/types/v1/types.proto\x12\x18holistik.common.types.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"K\n" +
+	"\fX509KeyPairs\x12;\n" +
+	"\x05pairs\x18\x01 \x03(\v2%.holistik.common.types.v1.X509KeyPairR\x05pairs\"\x86\x01\n" +
+	"\vX509KeyPair\x12\x14\n" +
+	"\x05keyid\x18\x01 \x01(\fR\x05keyid\x12;\n" +
+	"\x06status\x18\x02 \x01(\x0e2#.holistik.common.types.v1.KeyStatusR\x06status\x12\x12\n" +
+	"\x04cert\x18\x03 \x01(\fR\x04cert\x12\x10\n" +
+	"\x03crl\x18\x04 \x01(\fR\x03crl\"I\n" +
+	"\vJWTKeyPairs\x12:\n" +
+	"\x05pairs\x18\x01 \x03(\v2$.holistik.common.types.v1.JWTKeyPairR\x05pairs\"~\n" +
 	"\n" +
 	"JWTKeyPair\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x01 \x01(\fR\tpublicKey\x12\x1f\n" +
-	"\vprivate_key\x18\x02 \x01(\fR\n" +
-	"privateKey\x12C\n" +
-	"\bkey_type\x18\x03 \x01(\x0e2(.holistik.common.types.v1.PrivateKeyTypeR\akeyType\"}\n" +
-	"\bCAKeySet\x129\n" +
-	"\x04x509\x18\x01 \x03(\v2%.holistik.common.types.v1.X509KeyPairR\x04x509\x126\n" +
-	"\x03jwt\x18\x02 \x03(\v2$.holistik.common.types.v1.JWTKeyPairR\x03jwt\";\n" +
-	"\bKeyLabel\x12\x14\n" +
-	"\x05label\x18\x01 \x01(\tR\x05label\x12\x19\n" +
-	"\bkey_type\x18\x02 \x01(\tR\akeyType*\"\n" +
-	"\x0ePrivateKeyType\x12\a\n" +
-	"\x03RAW\x10\x00\x12\a\n" +
-	"\x03TPM\x10\x01*~\n" +
+	"public_key\x18\x01 \x01(\fR\tpublicKey\x12\x14\n" +
+	"\x05keyid\x18\x02 \x01(\fR\x05keyid\x12;\n" +
+	"\x06status\x18\x03 \x01(\x0e2#.holistik.common.types.v1.KeyStatusR\x06status\"\xae\x04\n" +
+	"\bCAKeySet\x12A\n" +
+	"\x04type\x18\x01 \x01(\x0e2-.holistik.common.types.v1.CAKeySet.KeySetTypeR\x04type\x12\x1f\n" +
+	"\vkeyset_data\x18\x02 \x01(\fR\n" +
+	"keysetData\x12W\n" +
+	"\x0ekeyset_backend\x18\x03 \x01(\x0e20.holistik.common.types.v1.CAKeySet.KeySetBackendR\rkeysetBackend\x126\n" +
+	"\x17use_envelope_encryption\x18\x04 \x01(\bR\x15useEnvelopeEncryption\x12<\n" +
+	"\x04x509\x18\x05 \x01(\v2&.holistik.common.types.v1.X509KeyPairsH\x00R\x04x509\x129\n" +
+	"\x03jwt\x18\x06 \x01(\v2%.holistik.common.types.v1.JWTKeyPairsH\x00R\x03jwt\"^\n" +
+	"\n" +
+	"KeySetType\x12\x1b\n" +
+	"\x17KEYSET_TYPE_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14KEYSET_TYPE_INSECURE\x10\x01\x12\x19\n" +
+	"\x15KEYSET_TYPE_ENCRYPTED\x10\x02\"G\n" +
+	"\rKeySetBackend\x12\x1e\n" +
+	"\x1aKEYSET_BACKEND_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12KEYSET_BACKEND_RAW\x10\x01B\v\n" +
+	"\tkey_pairs*r\n" +
+	"\tKeyStatus\x12\x1a\n" +
+	"\x16KEY_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12KEY_STATUS_ENABLED\x10\x01\x12\x17\n" +
+	"\x13KEY_STATUS_DISABLED\x10\x02\x12\x18\n" +
+	"\x14KEY_STATUS_DESTROYED\x10\x03*~\n" +
 	"\n" +
 	"PIVSlotKey\x12\x1c\n" +
 	"\x18PIV_SLOT_KEY_UNSPECIFIED\x10\x00\x12\x13\n" +
@@ -496,27 +718,34 @@ func file_holistik_common_types_v1_types_proto_rawDescGZIP() []byte {
 	return file_holistik_common_types_v1_types_proto_rawDescData
 }
 
-var file_holistik_common_types_v1_types_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_holistik_common_types_v1_types_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_holistik_common_types_v1_types_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_holistik_common_types_v1_types_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_holistik_common_types_v1_types_proto_goTypes = []any{
-	(PrivateKeyType)(0),          // 0: holistik.common.types.v1.PrivateKeyType
+	(KeyStatus)(0),               // 0: holistik.common.types.v1.KeyStatus
 	(PIVSlotKey)(0),              // 1: holistik.common.types.v1.PIVSlotKey
 	(SignatureAlgorithmSuite)(0), // 2: holistik.common.types.v1.SignatureAlgorithmSuite
-	(*X509KeyPair)(nil),          // 3: holistik.common.types.v1.X509KeyPair
-	(*JWTKeyPair)(nil),           // 4: holistik.common.types.v1.JWTKeyPair
-	(*CAKeySet)(nil),             // 5: holistik.common.types.v1.CAKeySet
-	(*KeyLabel)(nil),             // 6: holistik.common.types.v1.KeyLabel
+	(CAKeySet_KeySetType)(0),     // 3: holistik.common.types.v1.CAKeySet.KeySetType
+	(CAKeySet_KeySetBackend)(0),  // 4: holistik.common.types.v1.CAKeySet.KeySetBackend
+	(*X509KeyPairs)(nil),         // 5: holistik.common.types.v1.X509KeyPairs
+	(*X509KeyPair)(nil),          // 6: holistik.common.types.v1.X509KeyPair
+	(*JWTKeyPairs)(nil),          // 7: holistik.common.types.v1.JWTKeyPairs
+	(*JWTKeyPair)(nil),           // 8: holistik.common.types.v1.JWTKeyPair
+	(*CAKeySet)(nil),             // 9: holistik.common.types.v1.CAKeySet
 }
 var file_holistik_common_types_v1_types_proto_depIdxs = []int32{
-	0, // 0: holistik.common.types.v1.X509KeyPair.key_type:type_name -> holistik.common.types.v1.PrivateKeyType
-	0, // 1: holistik.common.types.v1.JWTKeyPair.key_type:type_name -> holistik.common.types.v1.PrivateKeyType
-	3, // 2: holistik.common.types.v1.CAKeySet.x509:type_name -> holistik.common.types.v1.X509KeyPair
-	4, // 3: holistik.common.types.v1.CAKeySet.jwt:type_name -> holistik.common.types.v1.JWTKeyPair
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	6, // 0: holistik.common.types.v1.X509KeyPairs.pairs:type_name -> holistik.common.types.v1.X509KeyPair
+	0, // 1: holistik.common.types.v1.X509KeyPair.status:type_name -> holistik.common.types.v1.KeyStatus
+	8, // 2: holistik.common.types.v1.JWTKeyPairs.pairs:type_name -> holistik.common.types.v1.JWTKeyPair
+	0, // 3: holistik.common.types.v1.JWTKeyPair.status:type_name -> holistik.common.types.v1.KeyStatus
+	3, // 4: holistik.common.types.v1.CAKeySet.type:type_name -> holistik.common.types.v1.CAKeySet.KeySetType
+	4, // 5: holistik.common.types.v1.CAKeySet.keyset_backend:type_name -> holistik.common.types.v1.CAKeySet.KeySetBackend
+	5, // 6: holistik.common.types.v1.CAKeySet.x509:type_name -> holistik.common.types.v1.X509KeyPairs
+	7, // 7: holistik.common.types.v1.CAKeySet.jwt:type_name -> holistik.common.types.v1.JWTKeyPairs
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_holistik_common_types_v1_types_proto_init() }
@@ -524,13 +753,17 @@ func file_holistik_common_types_v1_types_proto_init() {
 	if File_holistik_common_types_v1_types_proto != nil {
 		return
 	}
+	file_holistik_common_types_v1_types_proto_msgTypes[4].OneofWrappers = []any{
+		(*CAKeySet_X509)(nil),
+		(*CAKeySet_Jwt)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_holistik_common_types_v1_types_proto_rawDesc), len(file_holistik_common_types_v1_types_proto_rawDesc)),
-			NumEnums:      3,
-			NumMessages:   4,
+			NumEnums:      5,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

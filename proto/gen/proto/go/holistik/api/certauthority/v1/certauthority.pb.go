@@ -23,55 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type CertAuthoritySpec_CertAuthorityType int32
-
-const (
-	CertAuthoritySpec_CERT_AUTHORITY_TYPE_UNSPECIFIED CertAuthoritySpec_CertAuthorityType = 0
-	CertAuthoritySpec_CERT_AUTHORITY_TYPE_IDENTITY    CertAuthoritySpec_CertAuthorityType = 1
-	CertAuthoritySpec_CERT_AUTHORITY_TYPE_ATTESTATION CertAuthoritySpec_CertAuthorityType = 2
-)
-
-// Enum value maps for CertAuthoritySpec_CertAuthorityType.
-var (
-	CertAuthoritySpec_CertAuthorityType_name = map[int32]string{
-		0: "CERT_AUTHORITY_TYPE_UNSPECIFIED",
-		1: "CERT_AUTHORITY_TYPE_IDENTITY",
-		2: "CERT_AUTHORITY_TYPE_ATTESTATION",
-	}
-	CertAuthoritySpec_CertAuthorityType_value = map[string]int32{
-		"CERT_AUTHORITY_TYPE_UNSPECIFIED": 0,
-		"CERT_AUTHORITY_TYPE_IDENTITY":    1,
-		"CERT_AUTHORITY_TYPE_ATTESTATION": 2,
-	}
-)
-
-func (x CertAuthoritySpec_CertAuthorityType) Enum() *CertAuthoritySpec_CertAuthorityType {
-	p := new(CertAuthoritySpec_CertAuthorityType)
-	*p = x
-	return p
-}
-
-func (x CertAuthoritySpec_CertAuthorityType) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (CertAuthoritySpec_CertAuthorityType) Descriptor() protoreflect.EnumDescriptor {
-	return file_holistik_api_certauthority_v1_certauthority_proto_enumTypes[0].Descriptor()
-}
-
-func (CertAuthoritySpec_CertAuthorityType) Type() protoreflect.EnumType {
-	return &file_holistik_api_certauthority_v1_certauthority_proto_enumTypes[0]
-}
-
-func (x CertAuthoritySpec_CertAuthorityType) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use CertAuthoritySpec_CertAuthorityType.Descriptor instead.
-func (CertAuthoritySpec_CertAuthorityType) EnumDescriptor() ([]byte, []int) {
-	return file_holistik_api_certauthority_v1_certauthority_proto_rawDescGZIP(), []int{1, 0}
-}
-
 // CertAuthority represents a CA
 type CertAuthority struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -158,17 +109,13 @@ func (x *CertAuthority) GetSpec() *CertAuthoritySpec {
 type CertAuthoritySpec struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// type identifies the type of certificate authority (eg. identity, attestation, etc.)
-	Type CertAuthoritySpec_CertAuthorityType `protobuf:"varint,1,opt,name=type,proto3,enum=holistik.api.certauthority.v1.CertAuthoritySpec_CertAuthorityType" json:"type,omitempty"`
-	// cluster_name identifies the cluster name this authority serves
-	ClusterName string `protobuf:"bytes,2,opt,name=cluster_name,json=clusterName,proto3" json:"cluster_name,omitempty"`
-	// active_keys are the CA key sets used to sign any new certificates.
-	ActiveKeys *v11.CAKeySet `protobuf:"bytes,3,opt,name=active_keys,json=activeKeys,proto3" json:"active_keys,omitempty"`
-	// additional_trusted_keys are additional CA key sets that can be used to
-	// verify certificates. Certificates should be verified with
-	// additional_trusted_keys and active_keys combined.
-	AdditionalTrustedKeys *v11.CAKeySet `protobuf:"bytes,4,opt,name=additional_trusted_keys,json=additionalTrustedKeys,proto3" json:"additional_trusted_keys,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	// tenant identifies the tenant this authority serves
+	Tenant string `protobuf:"bytes,2,opt,name=tenant,proto3" json:"tenant,omitempty"`
+	// keyset is the CA key set used to sign any new certificates.
+	Keyset        *v11.CAKeySet `protobuf:"bytes,3,opt,name=keyset,proto3" json:"keyset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CertAuthoritySpec) Reset() {
@@ -201,30 +148,23 @@ func (*CertAuthoritySpec) Descriptor() ([]byte, []int) {
 	return file_holistik_api_certauthority_v1_certauthority_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CertAuthoritySpec) GetType() CertAuthoritySpec_CertAuthorityType {
+func (x *CertAuthoritySpec) GetType() string {
 	if x != nil {
 		return x.Type
-	}
-	return CertAuthoritySpec_CERT_AUTHORITY_TYPE_UNSPECIFIED
-}
-
-func (x *CertAuthoritySpec) GetClusterName() string {
-	if x != nil {
-		return x.ClusterName
 	}
 	return ""
 }
 
-func (x *CertAuthoritySpec) GetActiveKeys() *v11.CAKeySet {
+func (x *CertAuthoritySpec) GetTenant() string {
 	if x != nil {
-		return x.ActiveKeys
+		return x.Tenant
 	}
-	return nil
+	return ""
 }
 
-func (x *CertAuthoritySpec) GetAdditionalTrustedKeys() *v11.CAKeySet {
+func (x *CertAuthoritySpec) GetKeyset() *v11.CAKeySet {
 	if x != nil {
-		return x.AdditionalTrustedKeys
+		return x.Keyset
 	}
 	return nil
 }
@@ -239,17 +179,11 @@ const file_holistik_api_certauthority_v1_certauthority_proto_rawDesc = "" +
 	"\bsub_kind\x18\x02 \x01(\tR\asubKind\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\tR\aversion\x12?\n" +
 	"\bmetadata\x18\x04 \x01(\v2#.holistik.common.header.v1.MetadataR\bmetadata\x12D\n" +
-	"\x04spec\x18\x05 \x01(\v20.holistik.api.certauthority.v1.CertAuthoritySpecR\x04spec\"\xb0\x03\n" +
-	"\x11CertAuthoritySpec\x12V\n" +
-	"\x04type\x18\x01 \x01(\x0e2B.holistik.api.certauthority.v1.CertAuthoritySpec.CertAuthorityTypeR\x04type\x12!\n" +
-	"\fcluster_name\x18\x02 \x01(\tR\vclusterName\x12C\n" +
-	"\vactive_keys\x18\x03 \x01(\v2\".holistik.common.types.v1.CAKeySetR\n" +
-	"activeKeys\x12Z\n" +
-	"\x17additional_trusted_keys\x18\x04 \x01(\v2\".holistik.common.types.v1.CAKeySetR\x15additionalTrustedKeys\"\x7f\n" +
-	"\x11CertAuthorityType\x12#\n" +
-	"\x1fCERT_AUTHORITY_TYPE_UNSPECIFIED\x10\x00\x12 \n" +
-	"\x1cCERT_AUTHORITY_TYPE_IDENTITY\x10\x01\x12#\n" +
-	"\x1fCERT_AUTHORITY_TYPE_ATTESTATION\x10\x02BaZ_github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1b\x06proto3"
+	"\x04spec\x18\x05 \x01(\v20.holistik.api.certauthority.v1.CertAuthoritySpecR\x04spec\"{\n" +
+	"\x11CertAuthoritySpec\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12\x16\n" +
+	"\x06tenant\x18\x02 \x01(\tR\x06tenant\x12:\n" +
+	"\x06keyset\x18\x03 \x01(\v2\".holistik.common.types.v1.CAKeySetR\x06keysetBaZ_github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1b\x06proto3"
 
 var (
 	file_holistik_api_certauthority_v1_certauthority_proto_rawDescOnce sync.Once
@@ -263,26 +197,22 @@ func file_holistik_api_certauthority_v1_certauthority_proto_rawDescGZIP() []byte
 	return file_holistik_api_certauthority_v1_certauthority_proto_rawDescData
 }
 
-var file_holistik_api_certauthority_v1_certauthority_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_holistik_api_certauthority_v1_certauthority_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_holistik_api_certauthority_v1_certauthority_proto_goTypes = []any{
-	(CertAuthoritySpec_CertAuthorityType)(0), // 0: holistik.api.certauthority.v1.CertAuthoritySpec.CertAuthorityType
-	(*CertAuthority)(nil),                    // 1: holistik.api.certauthority.v1.CertAuthority
-	(*CertAuthoritySpec)(nil),                // 2: holistik.api.certauthority.v1.CertAuthoritySpec
-	(*v1.Metadata)(nil),                      // 3: holistik.common.header.v1.Metadata
-	(*v11.CAKeySet)(nil),                     // 4: holistik.common.types.v1.CAKeySet
+	(*CertAuthority)(nil),     // 0: holistik.api.certauthority.v1.CertAuthority
+	(*CertAuthoritySpec)(nil), // 1: holistik.api.certauthority.v1.CertAuthoritySpec
+	(*v1.Metadata)(nil),       // 2: holistik.common.header.v1.Metadata
+	(*v11.CAKeySet)(nil),      // 3: holistik.common.types.v1.CAKeySet
 }
 var file_holistik_api_certauthority_v1_certauthority_proto_depIdxs = []int32{
-	3, // 0: holistik.api.certauthority.v1.CertAuthority.metadata:type_name -> holistik.common.header.v1.Metadata
-	2, // 1: holistik.api.certauthority.v1.CertAuthority.spec:type_name -> holistik.api.certauthority.v1.CertAuthoritySpec
-	0, // 2: holistik.api.certauthority.v1.CertAuthoritySpec.type:type_name -> holistik.api.certauthority.v1.CertAuthoritySpec.CertAuthorityType
-	4, // 3: holistik.api.certauthority.v1.CertAuthoritySpec.active_keys:type_name -> holistik.common.types.v1.CAKeySet
-	4, // 4: holistik.api.certauthority.v1.CertAuthoritySpec.additional_trusted_keys:type_name -> holistik.common.types.v1.CAKeySet
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	2, // 0: holistik.api.certauthority.v1.CertAuthority.metadata:type_name -> holistik.common.header.v1.Metadata
+	1, // 1: holistik.api.certauthority.v1.CertAuthority.spec:type_name -> holistik.api.certauthority.v1.CertAuthoritySpec
+	3, // 2: holistik.api.certauthority.v1.CertAuthoritySpec.keyset:type_name -> holistik.common.types.v1.CAKeySet
+	3, // [3:3] is the sub-list for method output_type
+	3, // [3:3] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_holistik_api_certauthority_v1_certauthority_proto_init() }
@@ -295,14 +225,13 @@ func file_holistik_api_certauthority_v1_certauthority_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_holistik_api_certauthority_v1_certauthority_proto_rawDesc), len(file_holistik_api_certauthority_v1_certauthority_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_holistik_api_certauthority_v1_certauthority_proto_goTypes,
 		DependencyIndexes: file_holistik_api_certauthority_v1_certauthority_proto_depIdxs,
-		EnumInfos:         file_holistik_api_certauthority_v1_certauthority_proto_enumTypes,
 		MessageInfos:      file_holistik_api_certauthority_v1_certauthority_proto_msgTypes,
 	}.Build()
 	File_holistik_api_certauthority_v1_certauthority_proto = out.File

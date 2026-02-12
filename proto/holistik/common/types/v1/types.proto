@@ -2,50 +2,99 @@ syntax = "proto3";
 
 package holistik.common.types.v1;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/common/types/v1;typesv1";
 
-// PrivateKeyType is the storage type of a private key.
-enum PrivateKeyType {
-  // RAW is a plaintext private key.
-  RAW = 0;
-  // TPM is a private key backed by a TPM device.
-  TPM = 1;
-  //   // PKCS11 is a private key backed by a PKCS11 device such as HSM.
-  //   PKCS11 = 2;
-  //   // GCP_KMS is a private key backed by GCP KMS.
-  //   GCP_KMS = 3;
-  //   // AWS_KMS is a private key backed by AWS KMS.
-  //   AWS_KMS = 4;
+enum KeyStatus {
+  // KEY_STATUS_UNSPECIFIED represents an unspecified key status.
+  KEY_STATUS_UNSPECIFIED = 0;
+  // KEY_STATUS_ACTIVE represents an active key.
+  KEY_STATUS_ENABLED = 1;
+  // KEY_STATUS_DISABLED represents a disabled key.
+  KEY_STATUS_DISABLED = 2;
+  // KEY_STATUS_DESTROYED represents a destroyed key.
+  KEY_STATUS_DESTROYED = 3;
+}
+
+message X509KeyPairs {
+  repeated X509KeyPair pairs = 1;
 }
 
 // X509KeyPair is a key pair used to sign X.509 certificates.
 message X509KeyPair {
+  // KeyID is the identifier of the key.
+  // This identifier is stored alongside the key in the keyset.
+  bytes keyid = 1;
+
+  // Status is the status of the key.
+  KeyStatus status = 2;
+
   // Cert is a PEM encoded TLS cert
-  bytes cert = 1;
-  // Key is a PEM encoded TLS key
-  bytes key = 2;
-  // KeyType is the type of the Key.
-  PrivateKeyType key_type = 3;
-  // CRL is an empty DER-encoded revocation list.
+  bytes cert = 3;
+
+  // CRL is a DER-encoded revocation list.
   bytes crl = 4;
+}
+
+message JWTKeyPairs {
+  repeated JWTKeyPair pairs = 1;
 }
 
 // JWTKeyPair is a key pair used to sign JWT.
 message JWTKeyPair {
   // PublicKey is a PEM encoded public key.
   bytes public_key = 1;
-  // PrivateKey is a PEM encoded private key.
-  bytes private_key = 2;
-  // KeyType is the type of the Key.
-  PrivateKeyType key_type = 3;
+
+  // KeyID is the identifier of the key.
+  // This identifier is stored alongside the key in the keyset.
+  bytes keyid = 2;
+
+  // Status is the status of the key.
+  KeyStatus status = 3;
 }
 
 // CAKeySet is the set of CA keys.
 message CAKeySet {
-  //  contains CA key/cert pairs.
-  repeated X509KeyPair x509 = 1;
-  // JWT contains signing key pairs.
-  repeated JWTKeyPair jwt = 2;
+  enum KeySetType {
+    KEYSET_TYPE_UNSPECIFIED = 0;
+    KEYSET_TYPE_INSECURE = 1;
+    KEYSET_TYPE_ENCRYPTED = 2;
+  }
+
+  enum KeySetBackend {
+    KEYSET_BACKEND_UNSPECIFIED = 0;
+    KEYSET_BACKEND_RAW = 1;
+    //    // TPM is a private key backed by a TPM device.
+    //    KEYSET_BACKEND_TPM = 2;
+    //   // PKCS11 is a private key backed by a PKCS11 device such as HSM.
+    //   KEYSET_BACKEND_PKCS11 = 3;
+    //   // GCP_KMS is a private key backed by GCP KMS.
+    //   KEYSET_BACKEND_GCP_KMS = 4;
+    //   // AWS_KMS is a private key backed by AWS KMS.
+    //   KEYSET_BACKEND_AWS_KMS = 5;
+  }
+
+  // Type is the type of the keyset.
+  KeySetType type = 1;
+
+  // keyset_data is a serialized Tink keyset.
+  // google.crypto.tink.Keyset or google.crypto.tink.EncryptedKeyset
+  bytes keyset_data = 2;
+
+  // Backend is the backend the keyset needs to interact with.
+  //
+  // Note: if keyset_type is INSECURE, this field must be equal to RAW.
+  KeySetBackend keyset_backend = 3;
+
+  // UseEnvelopeEncryption indicates whether envelope encryption needs to be used.
+  bool use_envelope_encryption = 4;
+
+  // KeyPairs contains the key pairs linked to the keyset.
+  oneof key_pairs {
+    X509KeyPairs x509 = 5;
+    JWTKeyPairs jwt = 6;
+  }
 }
 
 // PIVSlotKey is the key reference for a specific PIV slot.
@@ -81,13 +130,4 @@ enum SignatureAlgorithmSuite {
   // not for server or client keys. It is also valid to use the LEGACY for FIPS
   // suites if your cluster uses an HSM or KMS.
   SIGNATURE_ALGORITHM_SUITE_HSM_V1 = 3;
-}
-
-// KeyLabel combines a label that can be used to identify one or more keys with a keystore type that
-// determines where the keys can be found.
-message KeyLabel {
-  // Label is a value that can be used with the related keystore in order to find relevant keys.
-  string label = 1;
-  // Type represents which keystore should be searched when looking up keys by label.
-  string key_type = 2;
 }

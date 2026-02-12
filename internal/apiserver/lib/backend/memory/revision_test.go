@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/loicsikidi/holistik/internal/apiserver/backend"
+	"github.com/loicsikidi/holistik/internal/apiserver/lib/backend"
 	"github.com/loicsikidi/sentinel"
 )
 

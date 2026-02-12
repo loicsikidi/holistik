@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/loicsikidi/holistik/internal/apiserver/api/resources"
-	"github.com/loicsikidi/holistik/internal/apiserver/backend"
+	"github.com/loicsikidi/holistik/internal/apiserver/lib/backend"
 	"github.com/loicsikidi/holistik/internal/apiserver/services"
 	headerv1 "github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/common/header/v1"
 	"github.com/loicsikidi/sentinel"
