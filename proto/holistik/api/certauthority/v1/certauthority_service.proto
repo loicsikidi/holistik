@@ -38,7 +38,7 @@ message GetCertAuthoritiesRequest {
   bool include_key = 2;
 }
 
-//
+// Request for ListCertAuthorities
 message ListCertAuthoritiesRequest {
   reserved 1, 2;
   // // Type of certificate authority.

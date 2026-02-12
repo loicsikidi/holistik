@@ -20,6 +20,7 @@ in
         cosign
         syft
         gcc
+        grpcurl
       ]
       ++ helpers.packages;
 
