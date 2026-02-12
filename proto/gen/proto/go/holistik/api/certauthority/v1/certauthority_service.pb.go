@@ -271,10 +271,9 @@ const file_holistik_api_certauthority_v1_certauthority_service_proto_rawDesc = "
 	"page_token\x18\x04 \x01(\tR\tpageTokenJ\x04\b\x01\x10\x02J\x04\b\x02\x10\x03\"\x9e\x01\n" +
 	"\x1bListCertAuthoritiesResponse\x12W\n" +
 	"\x10cert_authorities\x18\x01 \x03(\v2,.holistik.api.certauthority.v1.CertAuthorityR\x0fcertAuthorities\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x9f\x02\n" +
+	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x90\x01\n" +
 	"\x14CertAuthorityService\x12x\n" +
-	"\x10GetCertAuthority\x126.holistik.api.certauthority.v1.GetCertAuthorityRequest\x1a,.holistik.api.certauthority.v1.CertAuthority\x12\x8c\x01\n" +
-	"\x13ListCertAuthorities\x129.holistik.api.certauthority.v1.ListCertAuthoritiesRequest\x1a:.holistik.api.certauthority.v1.ListCertAuthoritiesResponseBaZ_github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1b\x06proto3"
+	"\x10GetCertAuthority\x126.holistik.api.certauthority.v1.GetCertAuthorityRequest\x1a,.holistik.api.certauthority.v1.CertAuthorityBaZ_github.com/loicsikidi/holistik/proto/gen/proto/go/holistik/api/certauthority/v1;certauthorityv1b\x06proto3"
 
 var (
 	file_holistik_api_certauthority_v1_certauthority_service_proto_rawDescOnce sync.Once
@@ -299,11 +298,9 @@ var file_holistik_api_certauthority_v1_certauthority_service_proto_goTypes = []a
 var file_holistik_api_certauthority_v1_certauthority_service_proto_depIdxs = []int32{
 	4, // 0: holistik.api.certauthority.v1.ListCertAuthoritiesResponse.cert_authorities:type_name -> holistik.api.certauthority.v1.CertAuthority
 	0, // 1: holistik.api.certauthority.v1.CertAuthorityService.GetCertAuthority:input_type -> holistik.api.certauthority.v1.GetCertAuthorityRequest
-	2, // 2: holistik.api.certauthority.v1.CertAuthorityService.ListCertAuthorities:input_type -> holistik.api.certauthority.v1.ListCertAuthoritiesRequest
-	4, // 3: holistik.api.certauthority.v1.CertAuthorityService.GetCertAuthority:output_type -> holistik.api.certauthority.v1.CertAuthority
-	3, // 4: holistik.api.certauthority.v1.CertAuthorityService.ListCertAuthorities:output_type -> holistik.api.certauthority.v1.ListCertAuthoritiesResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
+	4, // 2: holistik.api.certauthority.v1.CertAuthorityService.GetCertAuthority:output_type -> holistik.api.certauthority.v1.CertAuthority
+	2, // [2:3] is the sub-list for method output_type
+	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name

@@ -1,4 +1,4 @@
-package ca_utils
+package cautils
 
 import (
 	"crypto"

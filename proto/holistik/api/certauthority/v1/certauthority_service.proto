@@ -13,7 +13,7 @@ service CertAuthorityService {
   // GetCertAuthority returns a cert authority by type and domain.
   rpc GetCertAuthority(GetCertAuthorityRequest) returns (CertAuthority);
   // ListCertAuthorities returns a list of cert authorities by type.
-  rpc ListCertAuthorities(ListCertAuthoritiesRequest) returns (ListCertAuthoritiesResponse);
+  // rpc ListCertAuthorities(ListCertAuthoritiesRequest) returns (ListCertAuthoritiesResponse);
   // // DeleteCertAuthority deletes the matching cert authority.
   // rpc DeleteCertAuthority(DeleteCertAuthorityRequest) returns (google.protobuf.Empty);
   // // UpsertCertAuthority creates or updates the provided cert authority.
